@@ -133,6 +133,7 @@
                                 <th>@lang('status')</th>
                                 <th>@lang('start_sub')</th>
                                 <th>@lang('end_sub')</th>
+                                <th>@lang('payment')</th>
                                 <th>@lang('actions')</th>
                             </tr>
                             </thead>
@@ -204,6 +205,12 @@
                         searchable: true
                     },
                     {
+                        data: "payment",
+                        name: "payment",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
                         data: "actions",
                         name: "actions",
                         orderable: true,
@@ -232,7 +239,50 @@
                 });
             });
 
+            $(document).ready(function() {
+            $(document).on('change', '.select_status', function(event) {
+                if(confirm("هل تريد فعلا تعديل حالة الطلب ؟؟ ")){
+                    var form =  document.getElementById("form_status");
+              var data = new FormData(form) ;
+              let url = $(form).attr('action');
+              var method = $(form).attr('method');
+                $.ajax({
+                    type: method,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    url: url ,
+                    data: data,
 
+                    beforeSend: function() {},
+                    success: function(result) {
+                        toastr.success(result.success);
+                        table.draw()
+                    },
+                    error: function(data) {
+                        if (data.status === 422) {
+                            var response = data.responseJSON;
+                            $.each(response.errors, function(key, value) {
+                                var str = (key.split("."));
+                                if (str[1] === '0') {
+                                    key = str[0] + '[]';
+                                }
+                                $('[name="' + key + '"], [name="' + key + '[]"]').addClass(
+                                    'is-invalid');
+                                $('[name="' + key + '"], [name="' + key + '[]"]').closest(
+                                    '.form-group').find('.invalid-feedback').html(value[0]);
+                            });
+                        } else {
+                            console.log('ahmed');
+                        }
+                    }
+                });
+                }else{
+                    document.getElementById("form_status").reset();
+                }
+
+            });
+        });
 
     </script>
 

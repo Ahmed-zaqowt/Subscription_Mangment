@@ -37,6 +37,13 @@ class SubscriptionController extends Controller
                     return '<div class="badge rounded-pill alert-warning">الاشتراك منتهي </div>'  ;
                    }
               })
+              ->addColumn('payment' , function($qur){
+                if($qur->payment == Subscription::NOPAID){
+                   return '<div class="badge rounded-pill alert-danger"> غير مسددة</div>'  ;
+                }elseif($qur->payment == Subscription::PAID){
+                   return '<div class="badge rounded-pill alert-success">  مسددة</div>'  ;
+                }
+             })
               ->addColumn('actions', function ($qur) {
                 if($qur->status == Subscription::ACCEPTED){
                     return '<form method="post" id="form_status" action="' . route('admin.order.update') . '">
@@ -56,7 +63,7 @@ class SubscriptionController extends Controller
                 }
 
             })
-              ->rawColumns(['name' , 'status' , 'mobile' , 'actions'])
+              ->rawColumns(['name', 'payment' , 'status' , 'mobile' , 'actions'])
             ->make(true);
     }
 

@@ -8,13 +8,17 @@
 
 @section('content')
 
+
+
+
+
     <div class="row">
         <div class="col-12 col-lg-12 col-xl-12 d-flex">
             <div class="card radius-10 w-100">
                 <div class="card-header bg-transparent">
                     <div class="row g-3 align-items-center">
                         <div class="col">
-                            <h5 class="mb-0">سجل اشتراكات المستخدم</h5>
+                            <h5 class="mb-0">@lang(' الطلبات المرسلة للتجديد')</h5>
                         </div>
                         <div class="col">
                             <div class="d-flex align-items-center justify-content-end gap-3 cursor-pointer">
@@ -36,11 +40,16 @@
                             <thead class="table-light">
                             <tr>
                                 <th>#</th>
+                                <th>@lang('name_dist')</th>
+                                <th>@lang('name')</th>
+                                <th>@lang('mobile')</th>
+                                <th>@lang('id_number')</th>
+                                <th>@lang('serial_number')</th>
+                                <th>@lang('status')</th>
                                 <th>@lang('start_sub')</th>
                                 <th>@lang('end_sub')</th>
-                                <th>@lang('price')</th>
-                                <th>@lang('payment')</th>
-                                <th>@lang('status')</th>
+                                <th>@lang('actions')</th>
+
                             </tr>
                             </thead>
                         </table>
@@ -54,6 +63,50 @@
 @section('js')
     <script>
 
+           $(document).ready(function() {
+            $(document).on('change', '.select_status', function(event) {
+                if(confirm("هل تريد فعلا تعديل حالة الطلب ؟؟ ")){
+                    var form =  document.getElementById("form_status");
+              var data = new FormData(form) ;
+              let url = $(form).attr('action');
+              var method = $(form).attr('method');
+                $.ajax({
+                    type: method,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    url: url ,
+                    data: data,
+
+                    beforeSend: function() {},
+                    success: function(result) {
+                        toastr.success(result.success);
+                        table.draw()
+                    },
+                    error: function(data) {
+                        if (data.status === 422) {
+                            var response = data.responseJSON;
+                            $.each(response.errors, function(key, value) {
+                                var str = (key.split("."));
+                                if (str[1] === '0') {
+                                    key = str[0] + '[]';
+                                }
+                                $('[name="' + key + '"], [name="' + key + '[]"]').addClass(
+                                    'is-invalid');
+                                $('[name="' + key + '"], [name="' + key + '[]"]').closest(
+                                    '.form-group').find('.invalid-feedback').html(value[0]);
+                            });
+                        } else {
+                            console.log('ahmed');
+                        }
+                    }
+                });
+                }else{
+                    document.getElementById("form_status").reset();
+                }
+
+            });
+        });
 
             var table = $('#datatable').DataTable({
                 processing: true,
@@ -63,10 +116,7 @@
                     url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json',
                 },
                 ajax: {
-                    url: "{{ route('dist.user.getdatasub') }}",
-                    data:{
-                        id:"{{ $sub->id }}"
-                    }
+                    url: "{{ route('admin.order.getdatarenewal') }}",
                 },
 
                 columns: [
@@ -77,33 +127,58 @@
                         searchable: false
                     },
                     {
-                        data: "start",
-                        name: "start",
+                        data: "name_dist",
+                        name: "name_dist",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "name",
+                        name: "name",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "mobile",
+                        name: "mobile",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "id_number",
+                        name: "id_number",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "serial_number",
+                        name: "serial_number",
                         orderable: true,
                         searchable: true
                     },
 
                     {
-                        data: "end",
-                        name: "end",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "price",
-                        name: "price",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "payment",
-                        name: "payment",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
                         data: "status",
                         name: "status",
+                        orderable: true,
+                        searchable: true
+                    },
+
+                    {
+                        data: "start",
+                        name: "start_sub",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "end",
+                        name: "end_sub",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "actions",
+                        name: "actions",
                         orderable: true,
                         searchable: true
                     },
@@ -129,6 +204,9 @@
                     imagePreview.src = imageURL;
                 });
             });
+
+
+
     </script>
 
 @stop

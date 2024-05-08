@@ -43,7 +43,8 @@ Route::middleware('auth')->group(function(){
             Route::get('/', 'index')->name('index');
             Route::get('/getdata', 'getdata')->name('getdata');
             Route::post('/update', 'update')->name('update');
-
+            Route::get('/renewal', 'renewal')->name('renewal');
+            Route::get('/getdatarenewal', 'getdatarenewal')->name('getdatarenewal');
             Route::get('/canceled', 'canceled')->name('canceled');
             Route::get('/getdatacanceled', 'getdatacanceled')->name('getdatacanceled');
         });
@@ -89,7 +90,8 @@ Route::middleware('auth')->group(function(){
             Route::get('/', 'index')->name('index');
             Route::get('/getdata', 'getdata')->name('getdata');
             Route::post('/delete', 'delete')->name('delete');
-
+            Route::get('/renewal', 'renewal')->name('renewal');
+            Route::get('/getdatarenewal', 'getdatarenewal')->name('getdatarenewal');
             Route::get('/canceled', 'canceled')->name('canceled');
             Route::get('/getdatacanceled', 'getdata_canceled')->name('getdata.canceled');
         });

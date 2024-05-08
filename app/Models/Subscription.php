@@ -14,9 +14,14 @@ class Subscription extends Model
     const ACCEPTED = 2 ;
     const CANCELED = 3 ;
     const EXPIRED = 4  ;
-    const OLD = 5 ;
-    const NEW = 6 ;
+    const RENEWAL = 5 ;
 
+    const OLD = 6 ;
+    const NEW = 7 ;
+
+
+    const NOPAID = 8 ;
+    const PAID = 9 ;
     function subscriber() {
          return $this->belongsTo(Subscriber::class);
     }

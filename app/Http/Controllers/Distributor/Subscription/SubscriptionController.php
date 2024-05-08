@@ -17,10 +17,11 @@ class SubscriptionController extends Controller
 
     function getdata() {
         $users = Subscription::query()
+        ->where('user_id' , Auth::user()
+        ->id)
         ->Where('status' , Subscription::ACCEPTED)
         ->orWhere('status' , Subscription::EXPIRED)
-        ->where('user_id' , Auth::user()
-        ->id);
+        ;
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('name_dis' , function ($qur) {
@@ -55,7 +56,7 @@ class SubscriptionController extends Controller
               ->make(true);
     }
 
-    
+
     function accepted() {
        return view('admin.distributors.subscriptions.accepted');
     }
@@ -145,7 +146,7 @@ class SubscriptionController extends Controller
         $subscription->update([
             'start' => $request->start ,
             'end' => $request->end ,
-            'status' => Subscription::ACCEPTED
+            'status' => Subscription::RENEWAL
         ]);
 
         return response()->json([

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Financial;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -54,6 +55,14 @@ class FinancialEntitlementsController extends Controller
          $dist->update([
            'portfolio' => 0
          ]);
+/*
+         $subscriptions = Subscription::Where('user_id' , $dist->id)->get();
+
+         foreach($subscriptions as $subscription){
+            $subscription->update([
+                'payment' => Subscription::PAID
+            ]);
+         }*/
 
          return redirect()->back()->with([
             'msg' => 'تم تصفير المحفظة ' ,

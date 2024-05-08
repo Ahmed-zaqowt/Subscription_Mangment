@@ -90,6 +90,12 @@
                       الطلبات الملغية
                  </a>
                  </li>
+                 <li>
+                    <a href="{{  route('admin.order.renewal') }}">
+                        <i class="bi bi-circle"></i>
+                         الطلبات المرسلة للتجديد
+                    </a>
+                    </li>
          </ul>
        </li>
        <li>
@@ -196,6 +202,13 @@
                      الطلبات الملغية
                 </a>
                 </li>
+
+                <li>
+                    <a href="{{  route('dist.order.renewal') }}">
+                        <i class="bi bi-circle"></i>
+                         الطلبات المرسلة للتجديد
+                    </a>
+                    </li>
         </ul>
       </li>
       <li>
