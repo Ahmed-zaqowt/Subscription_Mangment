@@ -99,7 +99,7 @@
         </div>
     </div>
 
- 
+
 
 
 
@@ -109,7 +109,7 @@
                 <div class="card-header bg-transparent">
                     <div class="row g-3 align-items-center">
                         <div class="col">
-                            <h5 class="mb-0">@lang('users')</h5>
+                            <h5 class="mb-0">المشتركين</h5>
                         </div>
                         <div class="col">
                             <div class="d-flex align-items-center justify-content-end gap-3 cursor-pointer">

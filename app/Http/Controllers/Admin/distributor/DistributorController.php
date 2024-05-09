@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\distributor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\SMS;
 use App\Models\Subscriber;
 use App\Models\Subscription;
 use App\Models\User;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Vonage\SMS\SentSMS;
 use Yajra\DataTables\Facades\DataTables;
 
 class DistributorController extends Controller
@@ -109,18 +111,7 @@ class DistributorController extends Controller
         ]);
 
 
-
-        $basic = new \Vonage\Client\Credentials\Basic("eeaebcf0", "jNGP6bFsyrNOJ0ii");
-        $client = new \Vonage\Client($basic);
-
-        $response = $client->sms()->send(
-            new \Vonage\SMS\Message\SMS("972592428263", 'Gaza City', 'تمت إضافة مشترك جديد، يرجى التأكيد' , 'unicode')
-        );
-
-        $message = $response->current();
-
-       
-
+        Controller::sendSMS(env('MOBILE_NUMBER_ADMIN') , env('APP_NAME') , SMS::ADD_SUBSCRIBER , $sub->user->name , null);
 
         return response()->json([
             "success" => "تم ارسال الطلب بنجاح "

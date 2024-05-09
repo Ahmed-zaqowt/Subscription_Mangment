@@ -20,6 +20,6 @@ class admin
         if(Auth::user()->status == User::SUPER){
             return $next($request);
         }
-        return redirect()->route('errors');
+        return redirect('/');
     }
 }

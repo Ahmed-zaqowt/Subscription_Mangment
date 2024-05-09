@@ -115,17 +115,11 @@
       <header class="top-header">
         <nav class="navbar navbar-expand gap-3">
 
-
+            <div class="mobile-toggle-icon fs-3">
+                <i class="bi bi-list"></i>
+              </div>
             <div class="top-navbar-right ms-auto">
               <ul class="navbar-nav align-items-center">
-                <li class="nav-item search-toggle-icon">
-                  <a class="nav-link" href="#">
-                    <div class="">
-                      <i class="bi bi-search"></i>
-                    </div>
-                  </a>
-              </li>
-
               <li class="nav-item dropdown dropdown-large">
                 <div class="dropdown-menu dropdown-menu-end">
                    <div class="row row-cols-3 gx-2">

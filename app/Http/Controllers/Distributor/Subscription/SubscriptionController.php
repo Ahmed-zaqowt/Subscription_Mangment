@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Distributor\subscription;
 
 use App\Http\Controllers\Controller;
+use App\Models\SMS;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Yajra\DataTables\Facades\DataTables;
 class SubscriptionController extends Controller
 {
     function index() {
+
+
         return view('admin.distributors.subscriptions.index');
     }
 
@@ -24,11 +27,15 @@ class SubscriptionController extends Controller
         ;
         return DataTables::of($users)
             ->addIndexColumn()
-            ->addColumn('name_dis' , function ($qur) {
-                return $qur->user->name;
+            ->addColumn('payment' , function ($qur) {
+                if($qur->payment == Subscription::NOPAID){
+                    return '<div class="badge rounded-pill alert-danger">  غير مسددة</div>'  ;
+                   }elseif($qur->payment == Subscription::PAID){
+                    return '<div class="badge rounded-pill alert-success">مسددة </div>'  ;
+                 }
               })
             ->addColumn('name' , function ($qur) {
-              return $qur->subscriber->name;
+                 return $qur->subscriber->name ;
             })
             ->addColumn('mobile' , function ($qur) {
                 return $qur->subscriber->mobile;
@@ -52,7 +59,7 @@ class SubscriptionController extends Controller
                 }
 
             })
-              ->rawColumns(['name' , 'status' , 'mobile' , 'actions'])
+              ->rawColumns(['name' , 'status' , 'mobile' , 'actions' , 'payment'])
               ->make(true);
     }
 
@@ -66,8 +73,12 @@ class SubscriptionController extends Controller
         ->id)->where('status' , Subscription::ACCEPTED )->orderBy('created_at', 'desc');
         return DataTables::of($users)
             ->addIndexColumn()
-            ->addColumn('name_dis' , function ($qur) {
-                return $qur->user->name;
+            ->addColumn('payment' , function ($qur) {
+                if($qur->payment == Subscription::NOPAID){
+                    return '<div class="badge rounded-pill alert-danger">  غير مسددة</div>'  ;
+                   }elseif($qur->payment == Subscription::PAID){
+                    return '<div class="badge rounded-pill alert-success">مسددة </div>'  ;
+                 }
               })
             ->addColumn('name' , function ($qur) {
               return $qur->subscriber->name;
@@ -89,7 +100,7 @@ class SubscriptionController extends Controller
                 return '<span class="text-danger">  ليس هناك اجراءات للاشتراك</span>';
 
             })
-              ->rawColumns(['name' , 'status' , 'mobile', 'actions'])
+              ->rawColumns(['name' , 'status' , 'payment' ,  'mobile', 'actions'])
             ->make(true);
     }
 
@@ -102,9 +113,13 @@ class SubscriptionController extends Controller
          ->id)->where('status' , Subscription::EXPIRED )->orderBy('created_at', 'desc');
          return DataTables::of($users)
              ->addIndexColumn()
-             ->addColumn('name_dis' , function ($qur) {
-                 return $qur->user->name;
-               })
+             ->addColumn('payment' , function ($qur) {
+                if($qur->payment == Subscription::NOPAID){
+                    return '<div class="badge rounded-pill alert-danger">  غير مسددة</div>'  ;
+                   }elseif($qur->payment == Subscription::PAID){
+                    return '<div class="badge rounded-pill alert-success">مسددة </div>'  ;
+                 }
+              })
              ->addColumn('name' , function ($qur) {
                return $qur->subscriber->name;
              })
@@ -130,7 +145,7 @@ class SubscriptionController extends Controller
                 }
 
             })
-               ->rawColumns(['name' , 'status' , 'mobile' , 'actions'])
+               ->rawColumns(['name' , 'status' , 'mobile' , 'payment' , 'actions'])
              ->make(true);
      }
 
@@ -149,6 +164,7 @@ class SubscriptionController extends Controller
             'status' => Subscription::RENEWAL
         ]);
 
+        Controller::sendSMS(env('MOBILE_NUMBER_ADMIN') , env('APP_NAME') , SMS::RENEWAL , $subscription->user->name , $subscription->subscriber->name);
         return response()->json([
             'success' => __('تم تجديد الاشتراك بنجاح')
         ], 201);

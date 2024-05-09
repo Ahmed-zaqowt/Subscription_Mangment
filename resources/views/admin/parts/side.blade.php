@@ -9,20 +9,14 @@
         <img src="{{ asset('admin_assets/images/logo-icon.png')}}" class="logo-icon" alt="logo icon">
       </div>
       <div>
-        <h4 class="logo-text">Snacked</h4>
+        <h4 class="logo-text">Salhi</h4>
       </div>
       <div class="toggle-icon ms-auto"> <i class="bi bi-list"></i>
       </div>
     </div>
     <!--navigation-->
     <ul class="metismenu" id="menu">
-      <li>
-        <a href="javascript:;">
-          <div class="parent-icon"><i class="bi bi-house-fill"></i>
-          </div>
-          <div class="menu-title">@lang('dashboard')</div>
-        </a>
-      </li>
+
        @if (Auth::user()->status == User::SUPER)
        <li class="menu-label">@lang('admin_tools')</li>
        <li>
@@ -221,12 +215,44 @@
             <li>
             <a href="{{ route('dist.financial.index') }}">
                 <i class="bi bi-circle"></i>
-             الاستحقاق المالي للموزعين            </a>
+            المحفظة الخاصة بي           </a>
             </li>
         </ul>
       </li>
       @endif
+      <li>
+        <a class="has-arrow">
+          <div class="parent-icon"><i class="bi bi-person-lines-fill"></i>
+          </div>
+          <div class="menu-title">ادارة البيانات الشخصية</div>
+        </a>
+        <ul>
+            <li>
+            <a href="{{ route('admin.profile.index') }}">
+                <i class="bi bi-circle"></i>
+                    الملف الشخصي           </a>
+            </li>
 
+            <li>
+                <a href="{{ route('admin.profile.password') }}">
+                    <i class="bi bi-circle"></i>
+                        تغيير كلمة المرور          </a>
+                </li>
+        </ul>
+      </li>
+
+      <li>
+        <a  onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
+          <div class="parent-icon"><i class="bi bi-lock-fill"></i>
+          </div>
+          <div class="menu-title">تسجيل الخروج</div>
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            {{-- <button class="btn btn-danger btn-block">Logout</button> --}}
+           </form>
+      </li>
 
 
     </ul>

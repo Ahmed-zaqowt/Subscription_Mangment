@@ -4,7 +4,7 @@
 @section('content')
 
 
-<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-4">
+{{-- <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-4">
     <div class="col">
       <div class="card overflow-hidden radius-10">
           <div class="card-body p-2">
@@ -69,7 +69,7 @@
         </div>
       </div>
      </div>
-  </div><!--end row-->
+  </div>
 
 
   <div class="row">
@@ -206,7 +206,7 @@
       </div>
       </div>
     </div>
-  </div><!--end row-->
+  </div>
 
 
   <div class="row">
@@ -345,7 +345,7 @@
          </div><!--end row-->
         </div>
     </div>
-  </div><!--end row-->
+  </div>
 
 
   <div class="row">
@@ -667,17 +667,8 @@
       </div>
 
     </div>
-  </div><!--end row-->
-
-
-
-
-
-
-
-
-
-
+  </div>
+ --}}
 @stop
 
 

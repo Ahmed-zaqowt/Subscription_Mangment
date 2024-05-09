@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/' , function(){
+         return view('admin.index');
+});
 Route::middleware('auth')->group(function(){
     Route::get('errors' , [ErrorController::class , 'errors'])->name('errors');
     Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
@@ -58,6 +62,13 @@ Route::middleware('auth')->group(function(){
         Route::prefix('settings')->name('setting.')->controller(\App\Http\Controllers\Admin\Setting\SettingController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/storOrupdate', 'storOrupdate')->name('storOrupdate');
+        });
+
+        Route::prefix('profile')->name('profile.')->controller(\App\Http\Controllers\Admin\Profile\ProfileController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/update', 'update')->name('update');
+            Route::get('/password', 'password')->name('password');
+            Route::post('/update_password', 'update_password')->name('update_password');
         });
     });
 

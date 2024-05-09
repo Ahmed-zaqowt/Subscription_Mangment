@@ -20,6 +20,6 @@ class dist
         if(Auth::user()->status == User::ADMIN){
             return $next($request);
         }
-        return redirect()->route('errors');
+        return redirect('/');
     }
 }

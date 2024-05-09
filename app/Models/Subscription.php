@@ -22,6 +22,7 @@ class Subscription extends Model
 
     const NOPAID = 8 ;
     const PAID = 9 ;
+    
     function subscriber() {
          return $this->belongsTo(Subscriber::class);
     }

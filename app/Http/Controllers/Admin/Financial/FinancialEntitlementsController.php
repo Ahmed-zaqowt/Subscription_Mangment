@@ -52,17 +52,19 @@ class FinancialEntitlementsController extends Controller
 
      function zeroing(Request $request) {
          $dist = User::find($request->id);
+
+         $payments = Subscription::where('payment' , '8')->Where('user_id' , $request->id)->get();
+
+         foreach($payments as $subscription){
+             $subscription->update([
+                'payment' => '9'
+            ]);
+           // dd($subscription->payment);
+         }
+
          $dist->update([
            'portfolio' => 0
          ]);
-/*
-         $subscriptions = Subscription::Where('user_id' , $dist->id)->get();
-
-         foreach($subscriptions as $subscription){
-            $subscription->update([
-                'payment' => Subscription::PAID
-            ]);
-         }*/
 
          return redirect()->back()->with([
             'msg' => 'تم تصفير المحفظة ' ,

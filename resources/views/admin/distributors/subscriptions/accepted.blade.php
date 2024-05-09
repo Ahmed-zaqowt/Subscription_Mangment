@@ -32,6 +32,7 @@
                                 <th>@lang('status')</th>
                                 <th>@lang('start_sub')</th>
                                 <th>@lang('end_sub')</th>
+                                <th>@lang('payment')</th>
                                 <th>@lang('actions')</th>
                             </tr>
                             </thead>
@@ -94,6 +95,12 @@
                     {
                         data: "end",
                         name: "end_sub",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "payment",
+                        name: "payment",
                         orderable: true,
                         searchable: true
                     },

@@ -2,9 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\Controller;
+use App\Models\SMS;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+
+use function PHPUnit\Framework\isEmpty;
 
 class CheckSubscriptionStatus extends Command
 {
@@ -30,18 +34,30 @@ class CheckSubscriptionStatus extends Command
 
     public function handle()
     {
-       // ابحث عن الاشتراكات التي انتهت
-        $expiredSubscriptions = Subscription::
-        where('status' , Subscription::ACCEPTED)
-        ->where('end', '<', Carbon::now())->get();
 
-        // قم بتحديث حالة الاشتراكات المنتهية
-       foreach ($expiredSubscriptions as $subscription) {
+        $expiredSubscriptions = Subscription::where('status', Subscription::ACCEPTED)
+            ->get();
+
+        $expiredSubscriptionsTomorrow = Subscription::where('status', Subscription::ACCEPTED)
+            ->whereDate('end', Carbon::tomorrow())
+            ->get();
+
+
+        if ($expiredSubscriptionsTomorrow->isNotEmpty()) {
+            foreach ($expiredSubscriptionsTomorrow as $subscription) {
+                    Controller::sendSMS($subscription->user->mobile , env('APP_NAME') , SMS::EXPIRED_USER_MESSAGE , null , null , $subscription->end );
+
+                    Controller::sendSMS($subscription->subscriber->mobile , env('APP_NAME') , SMS::EXPIRED_USER_MESSAGE , null , null , $subscription->end );
+
+            }
+        }
+
+
+        foreach ($expiredSubscriptions as $subscription) {
             $subscription->update([
-               'status' => Subscription::EXPIRED ,
+                'status' => Subscription::EXPIRED,
             ]);
         }
 
-       // echo $expiredSubscriptions->count();
     }
 }

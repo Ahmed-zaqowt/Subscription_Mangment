@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Order;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\SMS;
 use App\Models\Subscriber;
 use App\Models\Subscription;
 use App\Models\User;
@@ -83,6 +84,11 @@ class OrderController extends Controller
             $admin->update([
                 'portfolio' => $portfolio - $subscription_price
             ]);
+
+            $order->update([
+                'payment' => '8' ,
+            ]);
+
         }
 
         if ($request->status == Subscription::ACCEPTED) {
@@ -102,6 +108,9 @@ class OrderController extends Controller
             $admin->update([
                 'portfolio' => $portfolio + $subscription_price
             ]);
+
+            Controller::sendSMS($order->user->mobile , env('APP_NAME') , SMS::ACCEPTE , $order->subscriber->name);
+
         } elseif ($request->status == Subscription::CANCELED) {
             $order->update([
                 'status' => Subscription::CANCELED
@@ -110,6 +119,8 @@ class OrderController extends Controller
             $order->update([
                 'status' => Subscription::WAITING
             ]);
+
+            Controller::sendSMS($order->user->mobile , env('APP_NAME') , SMS::CANCELED , $order->subscriber->name);
         } else {
             return  response()->json([
                 'danger' => 'الادخال خاطئ'
