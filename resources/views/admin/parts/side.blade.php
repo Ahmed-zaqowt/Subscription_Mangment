@@ -228,13 +228,13 @@
         </a>
         <ul>
             <li>
-            <a href="{{ route('admin.profile.index') }}">
+            <a href="{{ route('profile.index') }}">
                 <i class="bi bi-circle"></i>
                     الملف الشخصي           </a>
             </li>
 
             <li>
-                <a href="{{ route('admin.profile.password') }}">
+                <a href="{{ route('profile.password') }}">
                     <i class="bi bi-circle"></i>
                         تغيير كلمة المرور          </a>
                 </li>

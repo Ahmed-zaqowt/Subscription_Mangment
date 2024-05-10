@@ -20,7 +20,7 @@
                         {{ session('msg') }}
                     </div>
                     @endif
-                    <form class="form_edit" id="form_edit" enctype="multipart/form-data" action="{{ route('dist.user.update')  }}"  method="POST">
+                    <form  enctype="multipart/form-data" action="{{ route('profile.update')  }}"  method="POST">
                         @csrf
                         <input type="hidden" name="id" id="id"  class="form-control">
                         <div class="mb-2 form-group">

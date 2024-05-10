@@ -20,7 +20,7 @@
                         <div class="col">
                             <h5 class="mb-0">@lang(' الطلبات الملغية  ')</h5>
                         </div>
-                      
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -31,6 +31,7 @@
                                 <th>#</th>
                                 <th>@lang('name')</th>
                                 <th>@lang('mobile')</th>
+                                <th>@lang('status_number')</th>
                                 <th>@lang('id_number')</th>
                                 <th>@lang('serial_number')</th>
                                 <th>@lang('status')</th>
@@ -122,6 +123,12 @@
                     {
                         data: "mobile",
                         name: "mobile",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "status_number",
+                        name: "status_number",
                         orderable: true,
                         searchable: true
                     },

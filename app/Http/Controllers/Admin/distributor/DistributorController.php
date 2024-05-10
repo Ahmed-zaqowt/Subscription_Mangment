@@ -58,7 +58,7 @@ class DistributorController extends Controller
 
 
 
-     <div class="text-danger delete_btn" data-id="' . $qur->id . '" data-url="/User/Users/delete">
+     <div class="text-danger delete_btn" data-id="' . $qur->id . '" data-url="/distributor/users/delete">
         <i class="bi bi-trash-fill"></i>
       </div>
     </div>
@@ -66,7 +66,7 @@ class DistributorController extends Controller
                     return $string;
                 }
             )
-            ->rawColumns(['actions', 'start_sub', 'end_sub'])
+            ->rawColumns(['actions',  'status_number' ])
             ->make(true);
     }
 
@@ -80,6 +80,7 @@ class DistributorController extends Controller
             'serial_number' => 'required|string:255|unique:subscribers,serial_number',
             'start' => 'required',
             'end' => 'required',
+             'status_mobile' => 'required'
         ]);
 
         $subscriber = Subscriber::create([
@@ -96,6 +97,7 @@ class DistributorController extends Controller
             'status' => Subscription::WAITING,
             'start' => $request->start,
             'end' => $request->end,
+             'status_mobile' => $request->status_mobile
         ]);
 
         $startDate = Carbon::createFromFormat('Y-m-d', $sub->start);
@@ -103,7 +105,7 @@ class DistributorController extends Controller
 
         $diffInDays = $endDate->diffInDays($startDate);
         $setting = Setting::orderBy('created_at', 'desc')->first();
-        $subscription_price = ($diffInDays * $setting->price) / 30; // حصيلة الاشتراك كم بالفلوس
+        $subscription_price = ($diffInDays * $setting->price) / 30;
         $portfolio = $subscriber->portfolio;
         $admin = User::find(Auth::user()->id);
         $admin->update([
@@ -147,8 +149,9 @@ class DistributorController extends Controller
 
     function delete(Request $request)
     {
-        $User = User::find($request->id);
-        $User->delete();
+
+        $user = Subscriber::query()->findOrFail($request->id);
+        $user->delete();
 
         return response()->json(["success" => "Deleted Successful"], 201);
     }

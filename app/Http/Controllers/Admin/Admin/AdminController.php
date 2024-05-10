@@ -143,6 +143,12 @@ class AdminController extends Controller
             ->addColumn('name' , function ($qur) {
               return $qur->subscriber->name;
             })
+            ->addColumn('id_number' , function ($qur) {
+                return $qur->subscriber->id_number;
+              })
+              ->addColumn('serial_number' , function ($qur) {
+                return $qur->subscriber->serial_number;
+              })
             ->addColumn('mobile' , function ($qur) {
                 return $qur->subscriber->mobile;
               })
@@ -157,7 +163,7 @@ class AdminController extends Controller
                     return '<div class="badge rounded-pill alert-warning">الاشتراك منتهي </div>'  ;
                    }
               })
-              ->rawColumns(['name' , 'status' , 'mobile'])
+              ->rawColumns(['name' , 'status' , 'mobile' , 'serial_number' , 'id_number'])
             ->make(true);
     }
 

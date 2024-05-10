@@ -13,7 +13,7 @@ class FinancialController extends Controller
     function index(){
         $id = Auth::user()->id ;
         $user = User::Where('id' , $id)->first();
-        $portfolio = $user->portfolio ;
+        $portfolio = number_format($user->portfolio , 2) ;
         return view('admin.distributors.financial.index' , compact('portfolio'));
      }
 

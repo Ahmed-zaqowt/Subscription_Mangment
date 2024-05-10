@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Distributor\order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscriber;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,6 +41,13 @@ class OrderController extends Controller
                     return '<div class="badge rounded-pill alert-info">الطلب معلق </div>';
                 }
             })
+            ->addColumn('status_number', function ($qur) {
+                if ($qur->status_mobile == Subscription::NEW) {
+                    return '<div class="badge rounded-pill alert-success"> جديد </div>';
+                }elseif($qur->status_mobile == Subscription::OLD){
+                    return '<div class="badge rounded-pill alert-dark"> قديم </div>';
+                }
+            })
             ->addColumn('actions', function ($qur) {
                 $data_attr = '';
                 $data_attr .= 'data-id="' . $qur->id  . '" ';
@@ -65,15 +73,13 @@ class OrderController extends Controller
 
                 return $string;
 
-                return '
-                <div  class="text-warning edit_btn" data-bs-toggle="modal" data-bs-target="#edit-modal" ' . $data_attr . '><i class="bi bi-pencil-fill"></i></div>
-                ';
+
             })
-            ->rawColumns(['name', 'status', 'mobile', 'actions'])
+            ->rawColumns(['name', 'status', 'mobile', 'actions' , 'status_number'])
             ->make(true);
     }
 
-    /*function update(Request $request)
+    function update(Request $request)
     {
 
         $request->validate([
@@ -87,25 +93,31 @@ class OrderController extends Controller
         ]);
 
 
-        $User = User::query()->where('id', $request->id)->first();
-
-        $User->update([
+        //$subscriper = Subscriber::query()->where('id', $request->id)->first();
+        $subscription = Subscription::query()->where('id' , $request->id)->first();
+        $subscriber = Subscriber::query()->where('id' , $subscription->subscriber->id)->first();
+        $subscriber->update([
             'name' => $request->name,
-            'email' => $request->username,
+            'id_number' => $request->id_number,
+            'serial_number' => $request->serial_number,
             'mobile' => $request->mobile,
         ]);
 
-        if ($request->password != null) {
-            $User->update([
-                'password' => Hash::make($request->password),
-            ]);
-        }
+        $subscription->update([
+               'start'=>$request->start ,
+               'end' => $request->end ,
+               'status_mobile' => $request->status_mobile
+        ]);
+
+
+
+
 
         return response()->json([
             'success' => __('تم التعديل بنجاح')
         ], 201);
     }
-*/
+
 
     function delete(Request $request)
     {
@@ -143,12 +155,19 @@ class OrderController extends Controller
                     return '<div class="badge rounded-pill alert-danger">الطلب ملغي </div>';
                 }
             })
+            ->addColumn('status_number', function ($qur) {
+                if ($qur->status_mobile == Subscription::NEW) {
+                    return '<div class="badge rounded-pill alert-success"> جديد </div>';
+                }elseif($qur->status_mobile == Subscription::OLD){
+                    return '<div class="badge rounded-pill alert-dark"> قديم </div>';
+                }
+            })
             ->addColumn('actions', function ($qur) {
                 return '<div class="text-danger delete_btn" data-id="' . $qur->id . '" data-url="/distributor/orders/delete">
                 <i class="bi bi-trash-fill"></i>
                 </div>';
             })
-            ->rawColumns(['name', 'status', 'mobile', 'actions'])
+            ->rawColumns(['name', 'status_number' ,  'status', 'mobile', 'actions'])
             ->make(true);
     }
 
@@ -166,9 +185,6 @@ class OrderController extends Controller
 
         return DataTables::of($users)
             ->addIndexColumn()
-            ->addColumn('name_dist', function ($qur) {
-                return $qur->user->name;
-            })
             ->addColumn('name', function ($qur) {
                 return $qur->subscriber->name;
             })
@@ -186,12 +202,39 @@ class OrderController extends Controller
                     return '<div class="badge rounded-pill alert-info">الطلب مرسل للتجديد </div>';
                 }
             })
-            ->addColumn('actions', function ($qur) {
-                return '<div class="text-danger delete_btn" data-id="' . $qur->id . '" data-url="/distributor/orders/delete">
-                <i class="bi bi-trash-fill"></i>
-                </div>';
+            ->addColumn('status_number', function ($qur) {
+                if ($qur->status_mobile == Subscription::NEW) {
+                    return '<div class="badge rounded-pill alert-success"> جديد </div>';
+                }elseif($qur->status_mobile == Subscription::OLD){
+                    return '<div class="badge rounded-pill alert-dark"> قديم </div>';
+                }
             })
-            ->rawColumns(['name', 'status', 'mobile', 'actions'])
+            ->addColumn('actions', function ($qur) {
+                $data_attr = '';
+                $data_attr .= 'data-id="' . $qur->id  . '" ';
+                $data_attr .= 'data-name="' . $qur->subscriber->name . '"';
+                $data_attr .= 'data-id_number="' . $qur->subscriber->id_number . '"';
+                $data_attr .= 'data-serial_number="' . $qur->subscriber->serial_number . '"';
+                $data_attr .= 'data-start="' . $qur->start . '"';
+                $data_attr .= 'data-end="' . $qur->end . '"';
+                $data_attr .= 'data-mobile="' . $qur->subscriber->mobile . '"';
+                $data_attr .= 'data-status_mobile="' . $qur->status_mobile . '"';
+
+                $string = '';
+                $string .= '
+                   <div class="d-flex align-items-center gap-3 fs-6">
+
+      <div  class="text-warning edit_btn" data-bs-toggle="modal" data-bs-target="#edit-modal" ' . $data_attr . '><i class="bi bi-pencil-fill"></i></div>
+      <div class="text-danger delete_btn" data-id="' . $qur->id . '" data-url="/distributor/orders/delete">
+      <i class="bi bi-trash-fill"></i>
+      </div>
+    </div>
+      </div>';
+
+
+                return $string;
+            })
+            ->rawColumns(['name', 'status_number' ,  'status', 'mobile', 'actions'])
             ->make(true);
     }
 }

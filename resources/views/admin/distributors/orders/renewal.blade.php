@@ -10,6 +10,75 @@
 
 
 
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تعديل الطلب</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form_edit" id="form_edit" enctype="multipart/form-data"
+                    action="{{ route('dist.order.update') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" id="id" class="form-control">
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("name")</label>
+                        <input  id="edit_name" placeholder="@lang('name')"  name="name" class="form-control" type="text">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("mobile")</label>
+                        <input id="edit_mobile" placeholder="@lang('mobile')"  name="mobile" class="form-control" type="text">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("رقم الهوية")</label>
+                        <input id="edit_id_number"  placeholder="@lang('رقم الهوية')"  name="id_number" class="form-control" type="text">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("الرقم التسلسلي للشريحة")</label>
+                        <input id="edit_serial_number" placeholder="@lang('الرقم التسلسلي للشريحة')"  name="serial_number" class="form-control" type="text">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("بداية الاشتراك")</label>
+                        <input id="edit_start"  placeholder="@lang('بداية الاشتراك')"  name="start" class="form-control" type="date">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("نهاية الاشتراك")</label>
+                        <input id="edit_end"  placeholder="@lang('نهاية الاشتراك')"  name="end" class="form-control" type="date">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <label class="form-label">@lang("حالة الرقم التسلسلي")</label>
+                        <select name="status_mobile" id="edit_status_mobile" class="form-control" >
+                         <option disabled selected>حالة الرقم التسلسلي</option>
+                         <option value="6">قديم</option>
+                         <option value="7">جديد</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang("close")</button>
+                        <button type="submit" class="btn btn-info">@lang("save")</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
     <div class="row">
@@ -29,14 +98,14 @@
                             <thead class="table-light">
                             <tr>
                                 <th>#</th>
-                                <th>@lang('name_dist')</th>
                                 <th>@lang('name')</th>
                                 <th>@lang('mobile')</th>
+                                <th>@lang('status_number')</th>
                                 <th>@lang('id_number')</th>
                                 <th>@lang('serial_number')</th>
                                 <th>@lang('status')</th>
-                                <th>@lang('start_sub')</th>
-                                <th>@lang('end_sub')</th>
+                                <th>@lang('start')</th>
+                                <th>@lang('end')</th>
                                 <th>@lang('actions')</th>
 
                             </tr>
@@ -116,12 +185,6 @@
                         searchable: false
                     },
                     {
-                        data: "name_dist",
-                        name: "name_dist",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
                         data: "name",
                         name: "name",
                         orderable: true,
@@ -130,6 +193,12 @@
                     {
                         data: "mobile",
                         name: "mobile",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "status_number",
+                        name: "status_number",
                         orderable: true,
                         searchable: true
                     },
@@ -155,24 +224,27 @@
 
                     {
                         data: "start",
-                        name: "start_sub",
+                        name: "start",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "end",
-                        name: "end_sub",
+                        name: "end",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "actions",
                         name: "actions",
-                        orderable: true,
-                        searchable: true
+                        orderable: false,
+                        searchable: false
                     },
                 ]
             });
+
+            
+
 
             $(document).ready(function() {
                 $(document).on('click', '.edit_btn', function(event) {
@@ -183,19 +255,15 @@
                     var id = button.data('id');
                     $('#id').val(id);
                     $('#edit_name').val(button.data('name'))
-                    $('#edit_username').val(button.data('username'))
+                    $('#edit_id_number').val(button.data('id_number'))
+                    $('#edit_serial_number').val(button.data('serial_number'))
                     $('#edit_mobile').val(button.data('mobile'))
-                    //$('#image_preview').src(button.data('image'))
-                    var imageURL = button.data('image');
+                    $('#edit_start').val(button.data('start'))
+                    $('#edit_end').val(button.data('end'))
+                    $('#edit_status_mobile').val(button.data('status_mobile'))
 
-                    // اعثر على عنصر الصورة باستخدام الهوية وقم بتعيين الرابط
-                    var imagePreview = document.getElementById('image_preview');
-                    imagePreview.src = imageURL;
                 });
             });
-
-
-
     </script>
 
 @stop

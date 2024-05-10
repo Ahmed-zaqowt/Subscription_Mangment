@@ -56,10 +56,10 @@
 
                         <div class="mb-2 form-group">
                             <label class="form-label">@lang("حالة الرقم التسلسلي")</label>
-                            <select class="form-control" >
+                            <select name="status_mobile" class="form-control" >
                              <option disabled selected>حالة الرقم التسلسلي</option>
-                             <option>قديم</option>
-                             <option>جديد</option>
+                             <option value="6">قديم</option>
+                             <option value="7">جديد</option>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -219,6 +219,7 @@
                         orderable: true,
                         searchable: true
                     },
+
                     {
                         data: "actions",
                         name: "actions",

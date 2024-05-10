@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form_edit" id="form_edit" enctype="multipart/form-data"
-                        action="{{ route('dist.user.update') }}" method="POST">
+                        action="{{ route('dist.order.update') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id" id="id" class="form-control">
                         <div class="mb-2 form-group">
@@ -59,7 +59,7 @@
 
                         <div class="mb-2 form-group">
                             <label class="form-label">@lang("حالة الرقم التسلسلي")</label>
-                            <select id="edit_status_mobile" class="form-control" >
+                            <select name="status_mobile" id="edit_status_mobile" class="form-control" >
                              <option disabled selected>حالة الرقم التسلسلي</option>
                              <option value="6">قديم</option>
                              <option value="7">جديد</option>
@@ -100,11 +100,12 @@
                                     <th>#</th>
                                     <th>@lang('name')</th>
                                     <th>@lang('mobile')</th>
+                                    <th>@lang('status_number')</th>
                                     <th>@lang('id_number')</th>
                                     <th>@lang('serial_number')</th>
                                     <th>@lang('status')</th>
-                                    <th>@lang('start_sub')</th>
-                                    <th>@lang('end_sub')</th>
+                                    <th>@lang('start')</th>
+                                    <th>@lang('end')</th>
                                     <th>@lang('actions')</th>
                                 </tr>
                             </thead>
@@ -197,6 +198,12 @@
                     searchable: true
                 },
                 {
+                        data: "status_number",
+                        name: "status_mobile",
+                        orderable: true,
+                        searchable: true
+                    },
+                {
                     data: "id_number",
                     name: "id_number",
                     orderable: true,
@@ -218,13 +225,13 @@
 
                 {
                     data: "start",
-                    name: "start_sub",
+                    name: "start",
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: "end",
-                    name: "end_sub",
+                    name: "end",
                     orderable: true,
                     searchable: true
                 },

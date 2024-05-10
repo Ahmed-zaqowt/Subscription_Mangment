@@ -64,12 +64,7 @@ Route::middleware('auth')->group(function(){
             Route::post('/storOrupdate', 'storOrupdate')->name('storOrupdate');
         });
 
-        Route::prefix('profile')->name('profile.')->controller(\App\Http\Controllers\Admin\Profile\ProfileController::class)->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::post('/update', 'update')->name('update');
-            Route::get('/password', 'password')->name('password');
-            Route::post('/update_password', 'update_password')->name('update_password');
-        });
+
     });
 
     Route::prefix('distributor')->middleware('dist')->name('dist.')->group(function () {
@@ -101,7 +96,9 @@ Route::middleware('auth')->group(function(){
             Route::get('/', 'index')->name('index');
             Route::get('/getdata', 'getdata')->name('getdata');
             Route::post('/delete', 'delete')->name('delete');
+            Route::post('/update', 'update')->name('update');
             Route::get('/renewal', 'renewal')->name('renewal');
+            Route::post('/unrenewal', 'unrenewal')->name('unrenewal');
             Route::get('/getdatarenewal', 'getdatarenewal')->name('getdatarenewal');
             Route::get('/canceled', 'canceled')->name('canceled');
             Route::get('/getdatacanceled', 'getdata_canceled')->name('getdata.canceled');
@@ -115,6 +112,13 @@ Route::middleware('auth')->group(function(){
 
 
 
+    });
+
+    Route::prefix('admin/profile')->name('profile.')->controller(\App\Http\Controllers\Admin\Profile\ProfileController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/update', 'update')->name('update');
+        Route::get('/password', 'password')->name('password');
+        Route::post('/update_password', 'update_password')->name('update_password');
     });
 });
 

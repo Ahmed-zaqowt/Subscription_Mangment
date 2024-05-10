@@ -20,7 +20,7 @@
                         {{ session('msg') }}
                     </div>
                     @endif
-                    <form  enctype="multipart/form-data" action="{{ route('admin.profile.update_password')  }}"  method="POST">
+                    <form  enctype="multipart/form-data" action="{{ route('profile.update_password')  }}"  method="POST">
                         @csrf
 
 
