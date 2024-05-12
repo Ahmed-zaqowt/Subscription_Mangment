@@ -21,6 +21,8 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique(),
+            'status' => 1 , 
+            'mobile' => '972591234567'
             'password' => Hash::make('123456789') ,
             'remember_token' => Str::random(10),
         ];
