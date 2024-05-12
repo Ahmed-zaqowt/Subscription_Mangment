@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('auth')->group(function(){ 
+    
 Route::get('/' , function(){
          return view('admin.index');
 });
-Route::middleware('auth')->group(function(){
     Route::get('errors' , [ErrorController::class , 'errors'])->name('errors');
     Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::prefix('admins')->name('admin.')->controller(\App\Http\Controllers\Admin\Admin\AdminController::class)->group(function () {
